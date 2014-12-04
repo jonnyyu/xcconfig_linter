@@ -88,7 +88,7 @@ describe XCCLex do
 
       tok = lex.next
       expect(tok.type).to be :COMMENT
-      expect(tok.value).to eql '// this is a one line comment'
+      expect(tok.value).to eql ' this is a one line comment'
 
       expect(lex.next).to be_nil
     end

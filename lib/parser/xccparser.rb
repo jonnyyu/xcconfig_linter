@@ -10,8 +10,14 @@ class XCCParser < Rly::Yacc
   end
 
   rule 'statement : STRING "=" STRING
-                  | STRING "=" QUOTED_STRING' do |st, name, _, value|
-    st.value = "#{name.value} = #{value.value}"
+                  | STRING "=" QUOTED_STRING
+                  | COMMENT' do |st, p1, _, p3|
+    if p1.type == :COMMENT
+      st.value = p1.value
+    else
+      st.value = "#{p1.value} = #{p3.value}"
+    end
+
   end
 
 end

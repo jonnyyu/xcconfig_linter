@@ -17,7 +17,10 @@ class XCCLex < Rly::Lex
     t
   end
 
-  token :COMMENT, /\/\/.*$/
+  token :COMMENT, /\/\/.*$/ do |t|
+    t.value = t.value[2..-1]
+    t
+  end
   token :STRING, /[^ =,;\n]+/
 
   on_error do

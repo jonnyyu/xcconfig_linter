@@ -1,29 +1,34 @@
 require 'xcclinter'
 
 describe XCCParser do
-  context 'single key value' do
+  context 'basic file structure' do
     it 'should parse one single key value' do
-      expect(p('NAME=libacdb')).to eql ['NAME = libacdb']
+      pexpect('NAME=libacdb').to eql ['NAME = libacdb']
     end
 
     it 'should parse two key values separate by semicolon' do
-      expect(p('NAME=libacdb;CONFIG=Debug')).to eql ['NAME = libacdb', 'CONFIG = Debug']
+      pexpect('NAME=libacdb;CONFIG=Debug').to eql ['NAME = libacdb', 'CONFIG = Debug']
     end
 
     it 'should parse two key values separate by return' do
-      expect(p('NAME=libacdb
-                CONFIG=Debug')).to eql ['NAME = libacdb', 'CONFIG = Debug']
+      pexpect('NAME=libacdb
+               CONFIG=Debug').to eql ['NAME = libacdb', 'CONFIG = Debug']
     end
 
+    it 'should parse comments' do
+      pexpect('//this is a comment').to eql ['this is a comment']
+    end
+  end
+
+  context 'different type of values' do
     it 'should parse quoted value' do
-      expect(p('NAME="some value"')).to eql ['NAME = some value']
+      pexpect('NAME="some value"').to eql ['NAME = some value']
     end
+  end
 
-
-    def p(str)
-      parser = XCCParser.new(XCCLex.new)
-      parser.parse(str)
-    end
+  def pexpect(str)
+    parser = XCCParser.new(XCCLex.new)
+    expect(parser.parse(str))
   end
 
 end
