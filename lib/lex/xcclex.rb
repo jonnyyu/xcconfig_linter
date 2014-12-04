@@ -1,7 +1,10 @@
 require 'rly'
+require 'rly/helpers'
 
 class XCCLex < Rly::Lex
   ignore ' \t'
+
+  literals ',;'
 
   token :INCLUDE, '#include'
 
@@ -10,7 +13,7 @@ class XCCLex < Rly::Lex
     t
   end
 
-  token :STRING, /[^ ]+/
-
+  token :COMMENT, /\/\/.*$/
+  token :STRING, /[^ ,;]+/
 
 end

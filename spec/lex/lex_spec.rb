@@ -4,7 +4,7 @@ describe XCCLex do
   context 'Basic lexer' do
     it 'should lex simple key = value' do
 
-      lex = XCCLex.new('PRODUCT_NAME = libAcDb')
+      lex = XCCLex.new('PRODUCT_NAME = libAcDb;')
 
       tok = lex.next
       expect(tok.type).to eql :STRING
@@ -16,6 +16,28 @@ describe XCCLex do
       tok = lex.next
       expect(tok.type).to eql :STRING
       expect(tok.value).to eql 'libAcDb'
+
+      tok = lex.next
+      expect(tok.type).to eql ';'
+      expect(tok.value).to eql ';'
+
+      expect(lex.next).to be_nil
+    end
+
+    it 'should support two values' do
+      lex = XCCLex.new('value, value2')
+
+      tok = lex.next
+      expect(tok.type).to eql :STRING
+      expect(tok.value).to eql 'value'
+
+      tok = lex.next
+      expect(tok.type).to eql ','
+      expect(tok.value).to eql ','
+
+      tok = lex.next
+      expect(tok.type).to eql :STRING
+      expect(tok.value).to eql 'value2'
 
       expect(lex.next).to be_nil
     end
@@ -57,6 +79,16 @@ describe XCCLex do
       tok = lex.next
       expect(tok.type).to be :QUOTED_STRING
       expect(tok.value).to eql 'somefile'
+
+      expect(lex.next).to be_nil
+    end
+
+    it 'should accept one line comment ' do 
+      lex = XCCLex.new('// this is a one line comment')
+
+      tok = lex.next
+      expect(tok.type).to be :COMMENT
+      expect(tok.value).to eql '// this is a one line comment'
 
       expect(lex.next).to be_nil
     end
