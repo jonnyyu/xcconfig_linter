@@ -8,9 +8,7 @@ class XCCLex < Rly::Lex
 
   token :INCLUDE, '#include'
 
-  token :EOL, /\n+/ do |t|
-    t
-  end
+  token :EOL, /\n+/
 
   token :QUOTED_STRING, /"[^"]*"/ do |t|
     t.value = t.value[1...-1]
