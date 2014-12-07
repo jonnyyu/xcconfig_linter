@@ -8,6 +8,11 @@ class XCCLex < Rly::Lex
 
   token :INCLUDE, '#include'
 
+  token :COMMENT, /\/\/.*$/ do |t|
+    t.value = t.value[2..-1]
+    t
+  end
+
   token :EOL, /\n+/
 
   token :QUOTED_STRING, /"[^"]*"/ do |t|
@@ -15,14 +20,9 @@ class XCCLex < Rly::Lex
     t
   end
 
-  token :COMMENT, /\/\/.*$/ do |t|
-    t.value = t.value[2..-1]
-    t
-  end
   token :STRING, /[^ =,;\n]+/
 
-  on_error do
+  on_error do |t|
     puts "Illegal character #{t.value}"
   end
-
 end
